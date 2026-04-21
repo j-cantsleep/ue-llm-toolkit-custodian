@@ -12,6 +12,9 @@ Operational knowledge for working effectively with UE 5.7 projects through the p
 | debug | PIE automation, input injection, output log, diagnostics |
 | tooling | Plugin architecture, extension patterns, known gotchas |
 | meta | Domain system guide, loading instructions |
+| Common UI screens, menus | commonui |
+| Gameplay Ability System | gas |
+| Interface design / cross-system contracts | interfaces |
 
 ## When to Load
 

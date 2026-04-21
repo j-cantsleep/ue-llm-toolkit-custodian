@@ -10,6 +10,9 @@
 | debug | PIE automation, input injection, output log | Testing, debugging, sequence building |
 | tooling | Plugin architecture, extension, known gotchas | Extending the plugin |
 | meta | This file — system overview | First-time orientation |
+| commonui | Epic Common UI plugin — input routing, focus, activatable widgets | UI work with Common UI |
+| gas | Gameplay Ability System — ASC, attributes, abilities, effects | Implementing or debugging GAS |
+| interfaces | UInterface/IInterface patterns, Execute_ dispatch, TScriptInterface | Designing cross-system contracts |
 
 ## Loading Instructions
 
