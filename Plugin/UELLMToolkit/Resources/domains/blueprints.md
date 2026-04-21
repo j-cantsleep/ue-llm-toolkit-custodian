@@ -85,6 +85,16 @@ AnimBP variant also takes `state_machine` + `state_name`. K2 graphs: events left
 
 ## Common Patterns
 
+### `DefaultToSelf` — implicit self wiring
+
+Some UE functions have `DefaultToSelf="ParamName"` metadata. The named parameter is automatically wired to `self` at runtime when left unconnected. Do not add explicit wiring to Self for these pins — the connection is implicit. The pin will appear grayed out in the editor, which is correct.
+
+Example: `GetSlotAsCanvasPanelSlot` has `DefaultToSelf="Widget"`. Leave its `Widget` input pin unconnected when the target is the owning widget.
+
+### Verify nodes before connecting
+
+After `add_node`, call `get_node` on the returned node ID to confirm its pins exist before calling `connect_pins`. Connecting to a pin that doesn't exist can produce a misleading "succeeded" response that fails at compile time.
+
 ### _C Suffix for Class Paths
 Blueprint class paths (for `spawn_actor`, `parent_class`, etc.) need the `_C` suffix:
 ```
