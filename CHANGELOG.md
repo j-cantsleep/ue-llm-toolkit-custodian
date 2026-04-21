@@ -21,3 +21,13 @@ Expanded the `blueprint_modify` tool schema to document behavior that was previo
 Added validation in `ExecuteAddNode` that rejects unknown keys in `node_params` with a helpful error message. Previously, unknown keys were silently ignored, producing broken nodes without feedback.
 
 Valid keys are whitelisted: `function`, `target_class`, `event`, `action_path`, `variable`, `num_outputs`, `bone_name`, `control_rig_class`, `pin_values`. Any other key returns an error listing the valid set and pointing at `pin_values` as the correct location for pin default values.
+
+## Domain Additions
+
+Added three new general-purpose UE 5.7 domain files under `Plugin/UELLMToolkit/Resources/domains/`:
+
+- **`commonui.md`** — Epic's Common UI plugin: input routing, focus management, activatable widget lifecycle, platform styling.
+- **`gas.md`** — Gameplay Ability System: ASC placement, attributes, abilities, effects, tags, replication.
+- **`interfaces.md`** — UInterface/IInterface patterns, `Execute_` dispatch semantics, `TScriptInterface` usage.
+
+Also added workflow guidance to `tooling.md` (tool description authority, input validation patterns) and minor additions to `blueprints.md` (`DefaultToSelf` behavior, node verification pattern).
