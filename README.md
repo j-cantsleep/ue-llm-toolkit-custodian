@@ -1,4 +1,6 @@
-# UE LLM Toolkit
+# UE LLM Toolkit — Custodian Fork
+
+_A personal fork of [ue-llm-toolkit](https://github.com/ColtonWilley/ue-llm-toolkit) with local modifications for a personal project. See [`CHANGELOG.md`](CHANGELOG.md) for changes._
 
 **Give your AI the ability to actually *see inside* your Unreal project.**
 
@@ -6,7 +8,17 @@ A pure C++ plugin that exposes **37 tools** and **200+ operations** over HTTP, g
 
 This is **not** a "prompt-to-game" tool. It won't generate a forest or build you a castle from a sentence. This is a **debugging, analysis, and productivity tool** for developers who are already building something in Unreal and want an AI that can actually help — one that can read their Blueprint graphs, trace their animation state machines, inspect their montage notifies, and understand what their project is doing well enough to be useful.
 
-> Forked from [Natfii/UnrealClaude](https://github.com/Natfii/UnrealClaude) by [Natali Caggiano](https://github.com/Natfii) and significantly extended.
+> Forked from [ColtonWilley/ue-llm-toolkit](https://github.com/ColtonWilley/ue-llm-toolkit) by [Colton Wilkey](https://github.com/ColtonWilley), which was itself forked from [Natfii/UnrealClaude](https://github.com/Natfii/UnrealClaude) by [Natali Caggiano](https://github.com/Natfii) and significantly extended.
+
+## Fork Notes
+
+This fork contains local modifications developed while using the plugin on a UE 5.7 project. Changes focus on tool-schema hardening and runtime validation to improve Claude Code's reliability when constructing tool calls against the plugin.
+
+See [`CHANGELOG.md`](CHANGELOG.md) for the full changelog with rationale, before/after diffs, and verification results.
+
+No breaking changes to the upstream tool API — all changes are additive (tool description clarifications) or defensive (validation that rejects previously-silent-failing inputs with helpful errors).
+
+---
 
 ## Features
 
@@ -354,3 +366,4 @@ If you're on an older version and want to try porting, the tool pattern itself i
 ## Credits
 
 - **Original plugin**: [Natali Caggiano](https://github.com/Natfii) — [UnrealClaude](https://github.com/Natfii/UnrealClaude)
+- **Upstream fork**: [Colton Wilkey](https://github.com/ColtonWilley) — [ue-llm-toolkit](https://github.com/ColtonWilley/ue-llm-toolkit)
