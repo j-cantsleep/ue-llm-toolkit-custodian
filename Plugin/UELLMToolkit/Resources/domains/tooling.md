@@ -92,6 +92,8 @@ Key fields in T3D format:
 4. Implement `Execute()` with validation
 5. Register in `MCPToolRegistry.cpp`
 6. Add tests in `Private/Tests/`
+7. **Invest in tool descriptions.** Claude Code consults the tool's `Info.Description` and `FMCPToolParameter` descriptions on every call — these are more authoritative than domain documentation for call-shape rules. Use distinctive language (ALL CAPS for critical constraints, explicit warnings about silent failures, concrete examples) for anything that must be followed. Soft or mid-description clauses tend to get filtered out of Claude Code's working memory.
+8. **Validate inputs; fail loudly.** Silent ignoring of malformed input is a common antipattern. When rejecting invalid input, include a helpful error message explaining what was wrong and what the correct structure is — error messages are reliably read by Claude Code and drive self-correction on the next call.
 
 ### Adding a New Operation to an Existing Tool
 
