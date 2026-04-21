@@ -548,6 +548,45 @@ FMCPToolResult FMCPTool_BlueprintModify::ExecuteAddNode(const TSharedRef<FJsonOb
 		NodeParams = *NodeParamsPtr;
 	}
 
+	// Validate node_params keys — rejects unknown keys with helpful error.
+	// NOTE: If CreateNode (BlueprintGraphEditor.cpp) adds support for a new
+	// node_params key, add it to the whitelist below.
+	if (NodeParams.IsValid())
+	{
+		static const TSet<FString> KnownNodeParamsKeys = {
+			TEXT("function"),
+			TEXT("target_class"),
+			TEXT("event"),
+			TEXT("action_path"),
+			TEXT("variable"),
+			TEXT("num_outputs"),
+			TEXT("bone_name"),
+			TEXT("control_rig_class"),
+			TEXT("pin_values")
+		};
+
+		TArray<FString> UnknownKeys;
+		for (const auto& Kvp : NodeParams->Values)
+		{
+			if (!KnownNodeParamsKeys.Contains(Kvp.Key))
+			{
+				UnknownKeys.Add(Kvp.Key);
+			}
+		}
+
+		if (UnknownKeys.Num() > 0)
+		{
+			FString ErrorMsg = FString::Printf(
+				TEXT("Unknown key(s) in node_params: '%s'. Pin default values must be inside a 'pin_values' sub-object, not at the top level of node_params. "
+				     "Valid node_params keys are: function, target_class, event, action_path, variable, num_outputs, bone_name, control_rig_class, pin_values. "
+				     "Example for setting a pin default: \"node_params\": { \"function\": \"PrintString\", \"target_class\": \"KismetSystemLibrary\", \"pin_values\": { \"%s\": \"your value\" } }"),
+				*FString::Join(UnknownKeys, TEXT(", ")),
+				*UnknownKeys[0]
+			);
+			return FMCPToolResult::Error(ErrorMsg);
+		}
+	}
+
 	// Load and validate Blueprint
 	FMCPBlueprintLoadContext Context;
 	if (auto LoadError = Context.LoadAndValidate(Params))

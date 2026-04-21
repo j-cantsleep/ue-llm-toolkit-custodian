@@ -61,8 +61,17 @@ public:
 			"Level 7 (Layout): 'layout_graph' - auto-arrange nodes into readable BFS grid layout\n"
 			"Validation: 'compile' - compile single BP with diagnostics, 'compile_all' - batch compile under path\n\n"
 			"Workflow: Use blueprint_query first to understand existing structure, then modify.\n\n"
-			"Node types: CallFunction, Branch, Event, EnhancedInputAction (action_path), VariableGet, VariableSet, Sequence, "
-			"PrintString, Add, Subtract, Multiply, Divide\n\n"
+			"Node types (K2): 'CallFunction', 'Branch' (alias 'IfThenElse'), 'Event', 'EnhancedInputAction', "
+			"'VariableGet' (alias 'GetVariable'), 'VariableSet' (alias 'SetVariable'), 'Sequence', 'PrintString', "
+			"'Add', 'Subtract', 'Multiply', 'Divide'\n"
+			"Node types (AnimGraph): 'ModifyBone', 'TwoBoneIK', 'ControlRig'\n\n"
+			"CallFunction target_class: only these 5 short names resolve — 'KismetSystemLibrary', 'KismetMathLibrary', "
+			"'KismetStringLibrary', 'GameplayStatics', 'AnimInstance'. For any other library, use the full script path: "
+			"'/Script/UMG.WidgetBlueprintLibrary', '/Script/Engine.KismetTextLibrary', etc. Short names outside the 5 fail silently.\n\n"
+			"Event node: only 'BeginPlay', 'Tick', 'EndPlay' are hardcoded. Other event names are looked up on the parent C++ class — "
+			"must exist there as BlueprintImplementableEvent or BlueprintNativeEvent. Cannot create Blueprint-defined custom events via this operation.\n\n"
+			"VariableSet asymmetry: VariableGet reads from BP vars AND parent C++ properties; VariableSet only writes BP vars. "
+			"For C++ parent properties, use CallFunction to invoke a BlueprintCallable setter instead.\n\n"
 			"Variable types: bool, int32, float, FString, FVector, FRotator, AActor*, UObject*, etc.\n\n"
 			"Returns: Operation result with created node IDs (for subsequent connections).\n\n"
 			"Quick Start:\n"
@@ -74,8 +83,10 @@ public:
 		);
 		Info.Parameters = {
 			// Operation selector
-			FMCPToolParameter(TEXT("operation"), TEXT("string"),
-				TEXT("Operation to perform (see description for full list)"), true),
+			FMCPToolParameter(TEXT("node_type"), TEXT("string"),
+				TEXT("Node type. K2: 'CallFunction', 'Branch' (alias 'IfThenElse'), 'Event', 'EnhancedInputAction', "
+					 "'VariableGet' (alias 'GetVariable'), 'VariableSet' (alias 'SetVariable'), 'Sequence', 'PrintString', "
+					 "'Add', 'Subtract', 'Multiply', 'Divide'. AnimGraph: 'ModifyBone', 'TwoBoneIK', 'ControlRig'."), false),
 
 			// Common parameters
 			FMCPToolParameter(TEXT("blueprint_path"), TEXT("string"),
@@ -109,7 +120,11 @@ public:
 			FMCPToolParameter(TEXT("node_type"), TEXT("string"),
 				TEXT("Node type: 'CallFunction', 'Branch', 'Event', 'EnhancedInputAction', 'VariableGet', 'VariableSet', 'Sequence', 'PrintString', 'Add', 'Subtract', 'Multiply', 'Divide'"), false),
 			FMCPToolParameter(TEXT("node_params"), TEXT("object"),
-				TEXT("Node parameters: {function, target_class, event, variable, num_outputs, action_path}"), false),
+				TEXT("REQUIRED NESTED OBJECT — not flat top-level params. "
+					 "Contains two kinds of keys: (1) node config: 'function' (not 'function_name'), 'target_class', 'event' (not 'event_name'), 'variable', 'num_outputs', 'action_path'. "
+					 "(2) 'pin_values': sub-object for setting pin defaults at creation — keys are pin names, values are strings. "
+					 "For a PrintString with text, use pin_values — NOT a top-level 'InString' or 'string' key (silently ignored). "
+					 "Example: {\"function\":\"PrintString\",\"target_class\":\"KismetSystemLibrary\",\"pin_values\":{\"InString\":\"Hello World\"}}."), false),
 			FMCPToolParameter(TEXT("pos_x"), TEXT("number"),
 				TEXT("Node X position"), false, TEXT("0")),
 			FMCPToolParameter(TEXT("pos_y"), TEXT("number"),
